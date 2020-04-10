@@ -7,19 +7,27 @@
 </head>
 <body>
     <script>
-        // 单例模式 特点 共享 唯一
-        class SingleClass{
-            constructor(name,value){
-                this.name = name;
-                this.age = value
-            }
-            static getInstance(name,value){
-               this.instance = typeof this.instance == 'undefined' ? new SingleClass(name,value): this.instance
-                return this.instance
-            }
+        // // 单例模式 特点 共享 唯一
+        // class SingleClass{
+        //     constructor(name,value){
+        //         this.name = name;
+        //         this.age = value
+        //     }
+        //     static getInstance(name,value){
+        //        this.instance = typeof this.instance == 'undefined' ? new SingleClass(name,value): this.instance
+        //         return this.instance
+        //     }
+        // }
+        // let a = SingleClass.getInstance('张丹妮',123)
+        // let b = SingleClass.getInstance("wbq",321)
+        var a = 0;
+        if(true){
+            a = 1 
+            function a(){}
+            a = 21
+            console.log(a)
         }
-        let a = SingleClass.getInstance('张丹妮',123)
-        let b = SingleClass.getInstance("wbq",321)
+        console.log(a)
     </script>
 </body>
 </html>
