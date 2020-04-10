@@ -1,0 +1,21 @@
+.go-enter{
+    opacity: 0;
+    transform: translateY(400px);
+}
+.go-leave-to{
+    opacity: 0;
+    transform: translateY(400px);
+}
+.go-leave{
+    opacity: 1;
+    transform: translateY(0);
+}
+.go-enter-to{
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.go-enter-active,
+.go-leave-active{
+    transition: all 0.5s;
+}

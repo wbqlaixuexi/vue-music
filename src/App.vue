@@ -1,28 +1,35 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <Header></Header>
+    <Tab></Tab>
+    <routerView></routerView>
+    <Player v-show='show'></Player>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+import Header from "./components/Header"
+import Tab from "./components/tab"
+import Player from './components/player'
+import {mapState} from 'vuex'
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    Header,
+    Tab,
+    Player
+  },
+  computed:{
+    ...mapState({show:state => state.show})    
+  },
+  mounted(){
+    console.log(this.$store)
   }
 }
 </script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
+<style lang='less' scoped>
+@import './less/index.less';
+
+
+</style>  
