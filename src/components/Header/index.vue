@@ -1,7 +1,7 @@
 <template>
     <div class="header">
         <img src="/2.png" alt="">
-        <span>NZMUSIC</span>
+        <span>吴柏铅MUSIC</span>
     </div>
 </template>
 

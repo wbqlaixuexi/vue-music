@@ -2,83 +2,82 @@
   <div class="player">
     <transition name="big">
       <div class="big" v-show="fullScreen">
-      <div class="bgc">
-        <img :src="currentSong.albumUrl" alt="" />
-      </div>
-      <div class="header">
-        <span @click="toggleFull">v</span>
-        <h2>{{ currentSong.songname }}</h2>
-        <p>
-          {{ currentSong.singer[0] ? currentSong.singer[0].name : "" }}--{{
-            currentSong.albumname
-          }}
-        </p>
-      </div>
-      <transition-group mode="out-in">
-        <div
-          class="lyricBox"
-          v-show="showLyric"
-          @touchstart="touchStart"
-          @touchend="touchEnd"
-          ref="lyricBox"
-          :key="1"
-        >
-          <div class="content" ref="content" :key="2">
-            <p
-              v-for="(item, index) in lyricLines"
-              :key="index"
-              :class="lineNum == index ? 'current' : ''"
-              ref= index
-              
-            >
-              {{ item.txt }}
-            </p>
-          </div>
+        <div class="bgc">
+          <img :src="currentSong.albumUrl" alt="" />
         </div>
-
-        <div
-          class="goRight"
-          @touchstart="touchStart"
-          @touchend="touchEnd"
-          @touchmove="touchMove"
-          v-show="!showLyric"
-          :key="3"
-        >
-          <div class="imgBox " ref='imgBox'>
-            <img :src="currentSong.albumUrl" alt="" ref="img" />
-          </div>
-          <audio
-            autoplay
-            ref="audio"
-            @canplay="canplay"
-            @playing="playing"
-            @pause="pause"
-            @ended="ended"
-            @timeupdate="timeupdate"
-            :src="currentSong.albumAudio"
-          ></audio>
-          <p class="lyricP" style="font-size:14px">{{ txt }}</p>
+        <div class="header">
+          <span @click="toggleFull">v</span>
+          <h2>{{ currentSong.songname }}</h2>
+          <p>
+            {{ currentSong.singer[0] ? currentSong.singer[0].name : "" }}--{{
+              currentSong.albumname
+            }}
+          </p>
         </div>
-      </transition-group>
+        <transition-group mode="out-in">
+          <div
+            class="lyricBox"
+            v-show="showLyric"
+            @touchstart="touchStart"
+            @touchend="touchEnd"
+            ref="lyricBox"
+            :key="1"
+          >
+            <div class="content" ref="content" :key="2">
+              <p
+                v-for="(item, index) in lyricLines"
+                :key="index"
+                :class="lineNum == index ? 'current' : ''"
+                ref="index"
+              >
+                {{ item.txt }}
+              </p>
+            </div>
+          </div>
 
-      <MyProgress
-        :getTime="nowSongTime"
-        :getDurationTime="durationTime"
-        @getJumpTime="getJumpTime"
-      ></MyProgress>
-      <div class="bottom">
-        <span @click="changeloop" class="iconfont modeIcon">{{
-          loop == 1 ? "&#xe607;" : loop == 2 ? "&#xe649;" : "&#xe66b;"
-        }}</span>
-        <span @click="prevSong()">上一首</span>
-        <p @click="goPlayer" class="iconfont player">
-          {{ player ? "&#xe613;" : "&#xe626;" }}
-        </p>
+          <div
+            class="goRight"
+            @touchstart="touchStart"
+            @touchend="touchEnd"
+            @touchmove="touchMove"
+            v-show="!showLyric"
+            :key="3"
+          >
+            <div class="imgBox " ref="imgBox">
+              <img :src="currentSong.albumUrl" alt="" ref="img" />
+            </div>
+            <audio
+              autoplay
+              ref="audio"
+              @canplay="canplay"
+              @playing="playing"
+              @pause="pause"
+              @ended="ended"
+              @timeupdate="timeupdate"
+              :src="currentSong.albumAudio"
+            ></audio>
+            <p class="lyricP" style="font-size:14px">{{ txt }}</p>
+          </div>
+        </transition-group>
 
-        <span @click="nextSong()">下一首</span>
-        <span class="iconfont" style="font-size:30px;">&#xe617;</span>
+        <MyProgress
+          :getTime="nowSongTime"
+          :getDurationTime="durationTime"
+          @getJumpTime="getJumpTime"
+        ></MyProgress>
+        <div class="bottom">
+          <span @click="changeloop" class="iconfont modeIcon">{{
+            loop == 1 ? "&#xe607;" : loop == 2 ? "&#xe649;" : "&#xe66b;"
+          }}</span>
+          <span @click="prevSong()">上一首</span>
+          <p @click="goPlayer" class="iconfont player">
+            {{ player ? "&#xe613;" : "&#xe626;" }}
+          </p>
+
+          <span @click="nextSong()">下一首</span>
+          <span class="iconfont" style="font-size:30px;">&#xe617;</span>
+        </div>
       </div>
-    </div>
     </transition>
 
     <div class="small" v-show="!fullScreen" @click="toggleFull">
@@ -134,7 +133,7 @@ export default {
       showLyric: false,
       lyricLines: null,
       lineNum: 0,
-      BS: null
+      y: 0
     };
   },
   computed: {
@@ -143,12 +142,12 @@ export default {
   },
   methods: {
     ...mapMutations(["toggleFull"]),
-    initBS() {
-      //当currentNum > 5
-      //开始滚动歌词，每次滚动一个元素
-      this.BS = new BS(".lyricBox", { click: true, probeType: 3 });
-      // let currentNum = this.$refs.content.children[0];
-    },
+    // initBS() {
+    //   //当currentNum > 5
+    //   //开始滚动歌词，每次滚动一个元素
+    //   this.BS = new BS(".lyricBox", { click: true, probeType: 3 });
+    //   // let currentNum = this.$refs.content.children[0];
+    // },
     touchStart(e) {
       this.moveLeft = e.touches[0].pageX;
     },
@@ -156,7 +155,12 @@ export default {
     touchEnd(e) {
       if (this.moveLeft - e.changedTouches[0].pageX > 0) {
         this.showLyric = true;
-        this.lineNum = 1
+        if(this.lineNum < 6){
+          this.$nextTick(() => {
+          this.y = this.$refs.content.offsetTop;
+          this.$refs.content.style.transform = `translateY(${-this.y}px)`;
+        });
+        }
       }
       if (this.moveLeft - e.changedTouches[0].pageX < 0) {
         this.showLyric = false;
@@ -174,7 +178,6 @@ export default {
     },
     toggleFull() {
       this.$store.commit("toggleFull");
-      
     },
     canplay() {
       this.player = true;
@@ -245,13 +248,13 @@ export default {
           break;
         case 2:
           this.nextSong();
-          console.log(2);
+          // console.log(2);
           break;
         case 3:
           let length = this.songList.length - 1;
           let num = parseInt(Math.random() * -length + length);
           this.nextSong(num);
-          console.log(3);
+          // console.log(3);
           break;
       }
     },
@@ -267,10 +270,6 @@ export default {
     }
   },
   watch: {
-     showLyric(){
-       this.BS.scrollToElement(this.$refs.index[this.lineNum],0)
-      console.log(this.$refs.index[this.lineNum])
-    },
     player() {
       this.player ? this.$refs.audio.play() : this.$refs.audio.pause();
       if (this.currentLyric === null) {
@@ -304,14 +303,31 @@ export default {
           this.lyric = Base64.decode(res.lyric);
           this.currentLyric = new Lyric(this.lyric, this.handleLyric);
           this.lyricLines = this.currentLyric.lines;
-          this.lyricLines = this.lyricLines.concat(['','','','','','','','','','',''])
+          this.lyricLines = this.lyricLines.concat([
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+          ]);
           if (this.player) {
             this.currentLyric.play();
           }
+          this.$nextTick(() => {
+            this.y = this.$refs.content.offsetTop;
+            console.log(this.y);
+            this.$refs.content.style.transform = `translateY(${-this.y}px)`;
+          });
         })
         .catch(err => {});
       this.$nextTick(() => {
-        this.initBS();
+        // this.initBS();
       });
     },
     jumpTime() {
@@ -319,11 +335,10 @@ export default {
     },
     lineNum() {
       if (this.lineNum > 7) {
-        let currentNum = this.$refs.content.children[this.lineNum - 6];
-        this.BS.scrollToElement(currentNum, 1000);
+        this.$refs.content.style.transform = `translateY(${-this.y -
+          30 * (this.lineNum - 7)}px)`;
       } else {
-      this.BS.scrollToElement(this.$refs.content.children[this.lineNum], 1000);
-
+        this.$refs.content.style.transform = `translateY(${-this.y}px)`;
       }
     }
   }
@@ -332,10 +347,11 @@ export default {
 
 <style lang="less">
 @import "../../less/index.less";
-.touming{
-  visibility:hidden;
+
+.touming {
+  visibility: hidden;
 }
-.xianshi{
+.xianshi {
   visibility: visible;
 }
 .v-enter {
@@ -361,11 +377,11 @@ export default {
 
 .big-enter {
   opacity: 0;
-  transform: translate(-150px,400px);
+  transform: translate(-150px, 400px);
 }
 .big-enter-to {
   opacity: 0.5;
-  transform: translate(0,0);
+  transform: translate(0, 0);
   // transform: translateX(0);
 }
 .big-enter-active,
@@ -374,12 +390,12 @@ export default {
 }
 .big-leave {
   //  transform: translate(0);
-  transform: translate(0,0);
+  transform: translate(0, 0);
   opacity: 1;
 }
 .big-leave-to {
   // transform: translateX(300px);
-  transform: translate(-150px,300px);
+  transform: translate(-150px, 300px);
   opacity: 0;
 }
 
@@ -413,6 +429,9 @@ export default {
     display: flex;
     align-items: center;
     flex-direction: column;
+    .content {
+      transition: all 1s linear;
+    }
     .lyricP {
       width: 80vw;
       .h(20);
@@ -437,7 +456,7 @@ export default {
       }
       p {
         width: 100%;
-        .h(30);
+        height: 30px;
         text-align: center;
         line-height: 30px;
       }
