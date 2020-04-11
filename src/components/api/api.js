@@ -1,6 +1,4 @@
 import axios from "../axios/axios";
-import { commonParams, options } from "../api/config";
-import jsonp from "jsonp";
 let getSong = () => {
   let url =
     "/api/music/api/getDiscList?g_tk=1928093487&inCharset=utf-8&outCharset=utf-8&notice=0&format=json&platform=yqq&hostUin=0&sin=0&ein=29&sortId=5&needNewCode=0&categoryId=10000000&rnd=0.7404949493260609";
@@ -57,5 +55,9 @@ let getLyric = function(songmid){
             //http://ustbhuangyi.com/music/api/lyric?g_tk=1928093487&inCharset=utf-8&outCharset=utf-8&notice=0&format=json&songmid=001TXSYu1Gwuwv&platform=yqq&hostUin=0&needNewCode=0&categoryId=10000000&pcachetime=1585120257171
   return axios.get(url)
 }
+let getSearch = function(keywords){
+  let url = `/api/music/api/search?g_tk=1928093487&inCharset=utf-8&outCharset=utf-8&notice=0&format=json&w=${keywords}&p=1&perpage=20&n=20&catZhida=1&zhidaqu=1&t=0&flag=1&ie=utf-8&sem=1&aggr=0&remoteplace=txt.mqq.all&uin=0&needNewCode=1&platform=h5`
+  return axios.get(url)
+}
 
-export { getSong, getInfo, getCurrentAudio, getVkeys,getLyric };
+export { getSong, getInfo, getCurrentAudio, getVkeys,getLyric,getSearch };

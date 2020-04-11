@@ -106,7 +106,6 @@ export default {
       });
     },
     initBScroll() {
-      let wrapper = document.querySelector(".wrapper");
       this.$scroll = new BScroll(".wrapper", { probeType: 3,click:true });
       this.$scroll.on("scroll", res => {
         let scrollClient = Math.abs(res.y);
